@@ -132,8 +132,6 @@ unsigned short addressbar[2][29] = { {
 extern unsigned short dotcodelen;
 extern unsigned short bmplen;
 
-extern int dpi_multiplier;
-
 extern unsigned long addr[2];
 extern unsigned char raw[28][104];
 extern unsigned char dcsbmp[7912][352];

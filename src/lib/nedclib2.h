@@ -22,6 +22,10 @@
   #endif
 #endif
 
+#ifdef _MSC_VER
+	#define strcasecmp _stricmp
+#endif
+
 //#define GENERIC_DOTCODE 1
 
 #include <stdio.h>
@@ -76,7 +80,7 @@ extern NEDCLIB_API int dpi_multiplier;
 NEDCLIB_API int NVPK_compress (unsigned char *buf, int size, int compression_level, int lzwindow, int lzsize, int method, FILE *f, unsigned char *bitdata=NULL);
 NEDCLIB_API int vpk_decompress (unsigned char *vpk, FILE *f);
 NEDCLIB_API void log_write(const char* str, ...);
-extern NEDCLIB_API FILE *log;
+extern NEDCLIB_API FILE *nedclib_log;
 extern NEDCLIB_API int verbose;
 extern NEDCLIB_API unsigned long bits_written;
 extern NEDCLIB_API int best_move;

@@ -8,6 +8,39 @@ Included tools (see [here](#documentation) for documentation):
 - nedcenc
 - A ported version of nedclib.dll to be used as a C/C++ library. This can be imported into any number of languages that support C/C++ libraries such as Python, Rust, C/C++, Node (not vanilla JS), etc
 
+## Building
+
+CMakeLists.txt have been provided to make building on all platforms extremely easy.
+
+- Clone the repository with `git clone`
+
+- Install build dependencies:
+  - Windows
+    - Install [MSYS2](https://www.msys2.org/)
+    - Install [CMake](https://cmake.org/download/)
+  - macOS
+    - Install CMake
+      ```
+      brew install cmake
+      ```
+  - debian
+    - Install build tools and cmake
+      ```
+      apt install build-essential cmake
+      ```
+
+- If using Visual Studio Code, simply install the CMake Tools extension and then build. Binaries will be in `./build`.
+
+- Otherwise, make a directory called `build`, call `cmake ..` and finally `make` to build:
+  ```
+  mkdir build
+  cd build
+  cmake ..
+  make
+  ```
+
+Tested on Windows 11, macOS 26, and Debain 12.
+
 ## Why?
 
 Because the e-Reader was a simple device to reverse engineer. These tools allow you to write ARMv7, thumb, Z80, 6502 assembly and inject code into a number of GBA games. For example, you could inject custom events into the Pokemon games.

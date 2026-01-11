@@ -1,0 +1,91 @@
+name: CI - Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-windows-mingw:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          msystem: MINGW64
+          install: >
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+
+      - name: Configure & build (MinGW)
+        # <- use the msys2-provided shell helper
+        shell: msys2 {0}
+        run: |
+          export PATH="/c/msys64/mingw64/bin:$PATH"
+          cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -- -j 2
+
+      - name: Package artifacts (Windows)
+        run: |
+          New-Item -ItemType Directory -Force -Path release
+          Compress-Archive -Path 'build\*' -DestinationPath "release\${{ runner.os }}-nedclib-${{ github.sha }}.zip"
+        shell: powershell
+      
+      - name: Upload artifact (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: nedclib-windows-${{ github.sha }}
+          path: release/*.zip
+          retention-days: 7
+
+  build-macos:
+    name: macOS (clang)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install CMake
+        run: brew install cmake
+      - name: Configure & build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -- -j 2
+      - name: Package artifacts (macOS)
+        run: |
+          mkdir -p release
+          zip -r "release/${{ runner.os }}-nedclib-${{ github.sha }}.zip" build
+        shell: bash
+      
+      - name: Upload artifact (macOS)
+        uses: actions/upload-artifact@v4
+        with:
+          name: nedclib-macos-${{ github.sha }}
+          path: release/*.zip
+          retention-days: 7
+
+  build-ubuntu:
+    name: Ubuntu (gcc)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: sudo apt update && sudo apt install -y build-essential cmake git ninja-build
+      - name: Configure & build
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -- -j 2
+
+      - name: Package artifacts (Ubuntu)
+        run: |
+          mkdir -p release
+          zip -r "release/${{ runner.os }}-nedclib-${{ github.sha }}.zip" build
+        shell: bash
+      
+      - name: Upload artifact (Ubuntu)
+        uses: actions/upload-artifact@v4
+        with:
+          name: nedclib-ubuntu-${{ github.sha }}
+          path: release/*.zip
+          retention-days: 7

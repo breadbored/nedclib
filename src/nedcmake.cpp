@@ -272,12 +272,12 @@ void process_title(char *str, int titlenum, int cardmode, int region, int store_
 		else
 		{
 			k = titlestr[0];
-			if((k == '-'))
+			if(k == '-')
 			{
 				title[titlenum][1] = (char)0x80;
 				title[titlenum][2] = 0x06;
 			}
-			else if ((k == '_'))
+			else if (k == '_')
 			{
 				title[titlenum][1] = (char)0xC0;
 				title[titlenum][2] = 0x06;

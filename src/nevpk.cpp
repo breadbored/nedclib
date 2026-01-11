@@ -131,10 +131,10 @@ int main(int argc, char* argv[])
 		if(!strcasecmp(argv[i],"-log"))
 		{
 			i++;
-			if(nedc_fopen(&log,argv[i],"w")!=0)
+			if(nedc_fopen(&nedclib_log,argv[i],"w")!=0)
 			{
 				printf("Failed to open log file\n");
-				log=NULL;
+				nedclib_log=NULL;
 			}
 		}
 
@@ -362,8 +362,8 @@ int main(int argc, char* argv[])
 		i=vpk_decompress(vpk_buf,f);
 	}
 	fclose(f);
-	if(log!=NULL)
-		fclose(log);
+	if(nedclib_log!=NULL)
+		fclose(nedclib_log);
 
 	j=i;
 
